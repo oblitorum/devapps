@@ -36,15 +36,8 @@ export class Home extends React.Component<HomeProps, HomeState> {
 
   onSearchClick() {
     const search = this.state.search.trim();
-    if (search === '') {
-      this.setState({
-        filterApps: apps
-      });
-      return;
-    }
-
     const filterApps = apps.filter((app) => {
-      return app.name.includes(search);
+      return app.name.includes(search) || app.desc.includes(search);
     });
 
     this.setState({
