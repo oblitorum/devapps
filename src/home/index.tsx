@@ -1,16 +1,67 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { apps } from 'app/index';
+import { apps, AppType } from 'app/index';
 
 import 'bulma/css/bulma.min.css';
 import 'home/index.scss'
 
-export class Home extends React.Component {
+type HomeProps = {};
+type HomeState = {
+  search: string,
+  filterApps: AppType[]
+}
+
+export class Home extends React.Component<HomeProps, HomeState> {
+  constructor(props: HomeProps) {
+    super(props);
+    this.state = {
+      filterApps: apps,
+      search: '',
+      ...props
+    };
+  }
+
+  onSearchInput(e: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({
+      search: e.target.value
+    });
+  }
+
+  onSearchEnter(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter') {
+      this.onSearchClick();
+    }
+  }
+
+  onSearchClick() {
+    const search = this.state.search.trim();
+    if (search === '') {
+      this.setState({
+        filterApps: apps
+      });
+      return;
+    }
+
+    const filterApps = apps.filter((app) => {
+      return app.name.includes(search);
+    });
+
+    this.setState({
+      filterApps
+    });
+  }
+
   render() {
-    var appsArr = [];
-    while (apps.length > 0)
-      appsArr.push(apps.splice(0, 3))
+    const { filterApps } = this.state;
+    var appsArr: AppType[][] = [], i = 0;
+    while (filterApps.length > i) {
+      var tmpArr: AppType[] = []
+      for (var j = 0; i < filterApps.length && j < 3; i++, j++) {
+        tmpArr.push(filterApps[i]);
+      }
+      appsArr.push(tmpArr);
+    }
 
     return (
       <div className="main">
@@ -25,8 +76,8 @@ export class Home extends React.Component {
         </div>
 
         <div className="container is-max-desktop search-board">
-          <input className="input" type="text" placeholder="Search apps by name or keyword" />
-          <button className="button bg-primary">Search</button>
+          <input className="input" type="text" placeholder="Search apps by name or keyword" onKeyDown={this.onSearchEnter.bind(this)} onChange={this.onSearchInput.bind(this)} />
+          <button className="button bg-primary" onClick={this.onSearchClick.bind(this)}>Search</button>
         </div>
 
         <div className="container is-fullhd app-board">
@@ -36,7 +87,7 @@ export class Home extends React.Component {
                 {arr.map((app, j) => {
                   return (
                     <div key={i*3+j} className="column is-one-third">
-                      <div className="box app">
+                      <div className="box app is-clickable">
                         <article className="media">
                           <div className="media-left">
                             <figure className="image is-64x64">

@@ -1,5 +1,11 @@
 import React from 'react';
 
+export type AppType = {
+  name: string
+  icon: string
+  desc: string
+}
+
 export const apps = [
   {
     name: 'JSON Formatter & Validator',
