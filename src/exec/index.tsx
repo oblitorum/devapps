@@ -86,7 +86,7 @@ export class Exec extends React.Component<ExecProps, ExecState> {
         <div className="hero-head">
           <nav className="has-text-white has-background-primary" role="navigation" aria-label="main navigation">
             <div className="navbar-brand">
-              <a className="navbar-item" href="/">
+              <a style={{fontSize: "1.5rem"}} className="navbar-item has-text-white" href="/">
                 <span>DevApps</span>
               </a>
             </div>
@@ -151,7 +151,6 @@ export class Exec extends React.Component<ExecProps, ExecState> {
             })}
           </div>
         </div>
-        <div className="space"></div>
 
         <div className="hero-foot">
           <footer className="p-4 has-text-white has-background-primary has-text-centered">
