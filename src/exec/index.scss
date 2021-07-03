@@ -70,4 +70,85 @@
       }
     }
   }
+
+  .app-mobile {
+    padding: 0!important;
+    display: flex;
+    flex-direction: column!important;
+
+    .app-title {
+      display: flex;
+      background-color: $primary;
+
+      .left {
+        padding: 1rem;
+        font-size: 1.2rem;
+        flex: 1;
+      }
+    }
+
+    .app-content {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+
+      .app-input {
+        height: 15rem;
+        width: 100%;
+
+        textarea {
+          height: 100%;
+        }
+      }
+
+      .app-input-arrow,.app-output-arrow {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 1rem 0;
+
+        .left {
+          flex: 1;
+          text-align: end;
+        }
+
+        .right {
+          flex: 1;
+        }
+
+        .arrow-icon.is-primary {
+          fill: $primary;
+        }
+
+        .arrow-icon.is-light {
+          fill: $light;
+        }
+      }
+
+      .app-option {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        overflow-x: scroll;
+
+        button {
+          margin-right: 1rem;
+        }
+      }
+
+      .app-output {
+        height: 15rem;
+        width: 100%;
+
+        textarea {
+          height: 100%;
+        }
+      }
+    }
+  }
+}
+
+.hero-body.is-hidden-desktop .exec-list {
+  overflow-x: hidden;
 }

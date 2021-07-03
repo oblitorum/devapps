@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, RouteComponentProps } from 'react-router-dom';
-import { CaretForward } from 'react-ionicons';
+import { CaretForward, CaretDown } from 'react-ionicons';
 
 import { apps, AppType } from 'app/index';
 
@@ -93,7 +93,7 @@ export class Exec extends React.Component<ExecProps, ExecState> {
           </nav>
         </div>
 
-        <div className="hero-body">
+        <div className="hero-body is-hidden-touch">
           <div className="container is-fullhd is-flex is-flex-direction-column exec-list">
             {execApps.map((execApp, appIndex) => {
               return (
@@ -140,6 +140,64 @@ export class Exec extends React.Component<ExecProps, ExecState> {
                         <CaretForward cssClasses={execApp.selectedOptions.length? "arrow-icon is-primary" : "arrow-icon is-light"} />
                         <CaretForward cssClasses={execApp.selectedOptions.length? "arrow-icon is-primary" : "arrow-icon is-light"} />
                         <CaretForward cssClasses={execApp.selectedOptions.length? "arrow-icon is-primary" : "arrow-icon is-light"} />
+                      </div>
+                    </div>
+                    <div className="app-output">
+                      <textarea className="textarea is-primary" placeholder="no output" readOnly={true} value={this.genAppOutput(appIndex, execApp.input)}></textarea>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+        <div className="hero-body is-hidden-desktop pl-0 pr-0 pb-0">
+          <div className="container pl-5 pr-5 pb-6 is-fullhd is-flex is-flex-direction-column exec-list">
+            {execApps.map((execApp, appIndex) => {
+              return (
+                <div key={appIndex} className="box app-mobile">
+                  <div className="app-title">
+                    <div className="left has-text-white">{execApp.app.name}</div>
+                  </div>
+                  <div className="app-content">
+                    <div className="app-input">
+                      <textarea
+                        className={"textarea" + (execApp.input && !execApp.validateInput(execApp.input) ? " is-danger" : " is-primary")}
+                        placeholder="paste json data here"
+                        onChange={this.onInputChange.bind(this, appIndex)}
+                      ></textarea>
+                    </div>
+                    <div className="app-input-arrow">
+                      <div className="left">Input</div>
+                      <div className="right">
+                        <div><CaretDown cssClasses={execApp.input? "arrow-icon is-primary" : "arrow-icon is-light"} /></div>
+                        <div><CaretDown cssClasses={execApp.input? "arrow-icon is-primary" : "arrow-icon is-light"} /></div>
+                        <div><CaretDown cssClasses={execApp.input? "arrow-icon is-primary" : "arrow-icon is-light"} /></div>
+                      </div>
+                    </div>
+                    <div className="app-option">
+                      {execApp.options.map((option, optionIndex) => {
+                        return (
+                          <button
+                            key={optionIndex}
+                            className={
+                              "button"
+                              + (execApp.selectedOptions.includes(optionIndex) ? " is-primary" : " is-light")
+                            }
+                            onClick={this.onSelectOption.bind(this, appIndex, optionIndex)}
+                            disabled={execApp.input.trim() ? false : true}
+                          >
+                            {option.name}
+                          </button>
+                        )
+                      })}
+                    </div>
+                    <div className="app-output-arrow">
+                      <div className="left">Output</div>
+                      <div className="right">
+                        <div><CaretDown cssClasses={execApp.selectedOptions.length? "arrow-icon is-primary" : "arrow-icon is-light"} /></div>
+                        <div><CaretDown cssClasses={execApp.selectedOptions.length? "arrow-icon is-primary" : "arrow-icon is-light"} /></div>
+                        <div><CaretDown cssClasses={execApp.selectedOptions.length? "arrow-icon is-primary" : "arrow-icon is-light"} /></div>
                       </div>
                     </div>
                     <div className="app-output">
