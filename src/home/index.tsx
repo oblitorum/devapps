@@ -47,14 +47,6 @@ export class Home extends React.Component<HomeProps, HomeState> {
 
   render() {
     const { filterApps } = this.state;
-    var appsArr: AppType[][] = [], i = 0;
-    while (filterApps.length > i) {
-      var tmpArr: AppType[] = []
-      for (var j = 0; i < filterApps.length && j < 3; i++, j++) {
-        tmpArr.push(filterApps[i]);
-      }
-      appsArr.push(tmpArr);
-    }
 
     return (
       <div className="hero is-fullheight">
@@ -76,40 +68,36 @@ export class Home extends React.Component<HomeProps, HomeState> {
             </div>
 
             <div className="container is-fullhd app-board">
-              {appsArr.map((arr, i) => {
+              <div className="columns is-multiline">
+              {filterApps.map((app, i) => {
                 return (
-                  <div key={i} className="columns">
-                    {arr.map((app, j) => {
-                      return (
-                        <div key={i*3+j} className="column is-one-third">
-                          <NavLink
-                            to={{
-                              pathname: '/exec',
-                              state: {appIndex: i*3+j}
-                            }}
-                          >
-                            <div className="box app is-clickable">
-                              <article className="media">
-                                <div className="media-left">
-                                  <figure className="image is-64x64">
-                                    <img src={require(`app/${app.icon}`).default} alt={app.name} />
-                                  </figure>
-                                </div>
-                                <div className="media-content">
-                                  <div className="content">
-                                    <strong className="name">{app.name}</strong>
-                                    <p className="desc">{app.desc}</p>
-                                  </div>
-                                </div>
-                              </article>
+                  <div key={i} className="column is-one-third">
+                    <NavLink
+                      to={{
+                        pathname: '/exec',
+                        state: {appIndex: i}
+                      }}
+                    >
+                      <div className="box app is-clickable">
+                        <article className="media">
+                          <div className="media-left">
+                            <figure className="image is-64x64">
+                              <img src={require(`app/${app.icon}`).default} alt={app.name} />
+                            </figure>
+                          </div>
+                          <div className="media-content">
+                            <div className="content">
+                              <strong className="name">{app.name}</strong>
+                              <p className="desc">{app.desc}</p>
                             </div>
-                          </NavLink>
-                        </div>
-                      );
-                    })}
+                          </div>
+                        </article>
+                      </div>
+                    </NavLink>
                   </div>
                 )
               })}
+              </div>
             </div>
           </div>
         </div>
