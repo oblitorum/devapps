@@ -1,3 +1,4 @@
+import { Component } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -6,6 +7,7 @@ import {
 
 import { Home } from "home";
 import { Attribution } from "attribution";
+import { Exec } from "exec";
 
 function App() {
   return (
@@ -17,6 +19,10 @@ function App() {
         <Route path="/attributions">
           <Attribution />
         </Route>
+        <Route
+          path="/exec"
+          component={ Exec }
+        />
       </Switch>
     </Router>
   );

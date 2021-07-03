@@ -1,0 +1,90 @@
+@import '../index.scss';
+
+.exec-list {
+  min-height: 100%;
+
+  .app {
+    padding: 0!important;
+    height: 40rem;
+    display: flex;
+    flex-direction: column!important;
+
+    .app-title {
+      display: flex;
+      background-color: $primary;
+
+      .left {
+        padding: 1rem;
+        font-size: 1.2rem;
+        flex: 1;
+      }
+    }
+
+    .app-content {
+      flex: 1;
+      display: flex;
+      padding: 1rem;
+
+      .app-input {
+        flex: 1;
+
+        textarea {
+          height: 100%;
+        }
+      }
+
+      .app-input-arrow,.app-output-arrow {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 0 1rem;
+
+        .arrow-icon.is-primary {
+          fill: $primary;
+        }
+
+        .arrow-icon.is-light {
+          fill: $light;
+        }
+      }
+
+      .app-option {
+        flex: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        button {
+          margin-bottom: 1rem;
+        }
+      }
+
+      .app-output {
+        flex: 1;
+
+        textarea {
+          height: 100%;
+        }
+      }
+    }
+  }
+}
+
+.space {
+  height: 11rem;
+  width: 100%;
+}
+
+.my-footer {
+  height: 7rem!important;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+}

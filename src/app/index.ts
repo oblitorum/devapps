@@ -6,7 +6,7 @@ export type AppType = {
   desc: string
 }
 
-export const apps = [
+export const apps: AppType[] = [
   {
     name: 'JSON Formatter & Validator',
     icon: "json-file.svg",

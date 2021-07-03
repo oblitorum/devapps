@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import 'bulma/css/bulma.min.css';
+import 'index.scss';
 import 'attribution/index.scss'
 
 export class Attribution extends React.Component {
@@ -10,7 +10,7 @@ export class Attribution extends React.Component {
     return (
       <div className="main">
         <div className="container is-fluid navbar-board">
-          <nav className="navbar bg-primary" role="navigation" aria-label="main navigation">
+          <nav className="navbar has-background-primary" role="navigation" aria-label="main navigation">
             <div className="navbar-brand">
               <a className="navbar-item" href="/">
                 <span>DevApps</span>
@@ -45,7 +45,7 @@ export class Attribution extends React.Component {
         </div>
         <div className="space"></div>
 
-        <footer className="my-footer bg-primary has-text-centered">
+        <footer className="my-footer has-background-primary has-text-centered">
           <p>
             Copyright © 2021 Oblitorum. All rights reserved.
             <br/>

@@ -3,8 +3,8 @@ import { NavLink } from 'react-router-dom';
 
 import { apps, AppType } from 'app/index';
 
-import 'bulma/css/bulma.min.css';
-import 'home/index.scss'
+import 'index.scss';
+import 'home/index.scss';
 
 type HomeProps = {};
 type HomeState = {
@@ -59,7 +59,7 @@ export class Home extends React.Component<HomeProps, HomeState> {
     return (
       <div className="main">
         <div className="container is-fluid navbar-board">
-          <nav className="navbar bg-primary" role="navigation" aria-label="main navigation">
+          <nav className="navbar has-background-primary" role="navigation" aria-label="main navigation">
             <div className="navbar-brand">
               <a className="navbar-item" href="/">
                 <span>DevApps</span>
@@ -68,9 +68,9 @@ export class Home extends React.Component<HomeProps, HomeState> {
           </nav>
         </div>
 
-        <div className="container is-max-desktop search-board">
+        <div className="search-board container is-max-desktop">
           <input className="input" type="text" placeholder="Search apps by name or keyword" onKeyDown={this.onSearchEnter.bind(this)} onChange={this.onSearchInput.bind(this)} />
-          <button className="button bg-primary" onClick={this.onSearchClick.bind(this)}>Search</button>
+          <button className="button has-background-primary" onClick={this.onSearchClick.bind(this)}>Search</button>
         </div>
 
         <div className="container is-fullhd app-board">
@@ -80,21 +80,28 @@ export class Home extends React.Component<HomeProps, HomeState> {
                 {arr.map((app, j) => {
                   return (
                     <div key={i*3+j} className="column is-one-third">
-                      <div className="box app is-clickable">
-                        <article className="media">
-                          <div className="media-left">
-                            <figure className="image is-64x64">
-                              <img src={require(`app/${app.icon}`).default} alt={app.name} />
-                            </figure>
-                          </div>
-                          <div className="media-content">
-                            <div className="content">
-                              <strong className="name">{app.name}</strong>
-                              <p className="desc">{app.desc}</p>
+                      <NavLink
+                        to={{
+                          pathname: '/exec',
+                          state: {appIndex: i*3+j}
+                        }}
+                      >
+                        <div className="box app is-clickable">
+                          <article className="media">
+                            <div className="media-left">
+                              <figure className="image is-64x64">
+                                <img src={require(`app/${app.icon}`).default} alt={app.name} />
+                              </figure>
                             </div>
-                          </div>
-                        </article>
-                      </div>
+                            <div className="media-content">
+                              <div className="content">
+                                <strong className="name">{app.name}</strong>
+                                <p className="desc">{app.desc}</p>
+                              </div>
+                            </div>
+                          </article>
+                        </div>
+                      </NavLink>
                     </div>
                   );
                 })}
@@ -104,7 +111,7 @@ export class Home extends React.Component<HomeProps, HomeState> {
         </div>
         <div className="space"></div>
 
-        <footer className="my-footer bg-primary has-text-centered">
+        <footer className="my-footer has-background-primary has-text-centered">
           <p>
             Copyright © 2021 Oblitorum. All rights reserved.
             <br/>

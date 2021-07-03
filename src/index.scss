@@ -1,4 +1,5 @@
-$primary-color: #413C69;
+$primary: #413C69;
+$danger: #882211;
 $secondary-color: #4A47A3;
 $third-color: #709FB0;
 $fourth-color: #A7C5EB;
@@ -34,34 +35,4 @@ code {
     monospace;
 }
 
-.color-primary {
-  color: $primary-color!important;
-}
-
-.color-secondary {
-  color: $secondary-color!important;
-}
-
-.color-third {
-  color: $third-color;
-}
-
-.color-fourth {
-  color: $fourth-color;
-}
-
-.bg-primary {
-  background-color: $primary-color!important;
-}
-
-.bg-secondary {
-  background-color: $secondary-color!important;
-}
-
-.bg-third {
-  background-color: $third-color!important;
-}
-
-.bg-fourth {
-  background-color: $fourth-color!important;
-}
+@import 'bulma';
