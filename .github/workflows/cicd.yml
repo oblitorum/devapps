@@ -1,0 +1,45 @@
+name: CICD
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on new tags
+  create:
+    tags:
+      - 'v*.*.*'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: Run build
+        run: sudo docker build . --tag devapps:${{ env.RELEASE_VERSION }}
+
+  deploy:
+    needs: build
+
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: Deploy
+        run: |
+          SERVICES=$(sudo docker service ls --filter name=devapps --quiet | wc -l)
+          if [[ "$SERVICES" -eq 0 ]]; then \
+            sudo docker service create \
+              --name devapps \
+              --network haproxy \
+              devapps:${{ env.RELEASE_VERSION }}
+          else
+            sudo docker service update \
+              --image devapps:${{ env.RELEASE_VERSION }} \
+              devapps
+          fi
