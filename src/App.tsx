@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import {
   BrowserRouter as Router,
   Switch,

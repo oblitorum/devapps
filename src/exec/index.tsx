@@ -1,12 +1,11 @@
 import React from 'react';
 import { NavLink, RouteComponentProps } from 'react-router-dom';
-import { CaretForward, CaretDown } from 'react-ionicons';
+import { CaretForward, CaretDown, OptionsOutline } from 'react-ionicons';
 
-import { apps, AppType } from 'app/index';
+import { apps, AppType, ExecApp, execApps, ExecAppOptionAttrValue } from 'app/index';
 
 import 'index.scss'
 import 'exec/index.scss'
-import { ExecApp, execApps } from './app';
 
 type ExecRouterProps = {
   appIndex: number
@@ -19,23 +18,65 @@ type ExecState = {
     input: string
     app: AppType
     selectedOptions: number[]
-  })[]
+  })[],
+  optionAttrs: ExecAppOptionAttrValue[][][],
+  activeOptionMenu: string
 }
 
 export class Exec extends React.Component<ExecProps, ExecState> {
   constructor(props: ExecProps) {
     super(props);
+
+    var stateExecApps =
+      execApps[props.location.state.appIndex]
+      ? [{
+          ...execApps[props.location.state.appIndex],
+          input: '',
+          app: apps[props.location.state.appIndex],
+          selectedOptions: []
+        }]
+      : [];
+
+    var optionAttrs: ExecAppOptionAttrValue[][][] = [];
+    for (const execApp of stateExecApps) {
+      var secondArr: ExecAppOptionAttrValue[][] = [];
+
+      for (const option of execApp.options) {
+        var thirdArr: ExecAppOptionAttrValue[] = [];
+        const that = this;
+        thirdArr = thirdArr.concat(option.attributes ? option.attributes.map(function(attr) {
+          return that.attrValueToInput(attr.value);
+        }) : []);
+
+        secondArr.push(thirdArr);
+      }
+
+      optionAttrs.push(secondArr);
+    }
+
     this.state = {
-      execApps: 
-        execApps[props.location.state.appIndex]
-        ? [{
-            ...execApps[props.location.state.appIndex],
-            input: '',
-            app: apps[props.location.state.appIndex],
-            selectedOptions: []
-          }]
-        : []
+      execApps: stateExecApps,
+      optionAttrs,
+      activeOptionMenu: ""
     };
+  }
+
+  attrValueToInput(value: ExecAppOptionAttrValue): ExecAppOptionAttrValue {
+    switch (typeof value) {
+      case "number":
+        return value.toString();
+      default:
+        return value;
+    }
+  }
+
+  inputToAttrValue(expected: ExecAppOptionAttrValue, value: ExecAppOptionAttrValue): ExecAppOptionAttrValue {
+    switch (typeof expected) {
+      case "number":
+        return parseInt(value as string, 10);
+      default:
+        return value;
+    }
   }
 
   onInputChange(appIndex: number, e: React.ChangeEvent<HTMLTextAreaElement>) {
@@ -60,8 +101,24 @@ export class Exec extends React.Component<ExecProps, ExecState> {
     });
   }
 
+  onOptionAttrInputChange(appIndex: number, optionIndex: number, attrIndex: number, e: React.ChangeEvent<HTMLInputElement>) {
+    var { optionAttrs } = this.state;
+    switch (typeof optionAttrs[appIndex][optionIndex][attrIndex]) {
+      case "boolean":
+        optionAttrs[appIndex][optionIndex][attrIndex] = e.target.checked;
+        break;
+      default:
+        optionAttrs[appIndex][optionIndex][attrIndex] = e.target.value;
+        break;
+    }
+
+    this.setState({
+      optionAttrs
+    });
+  }
+
   genAppOutput(appIndex: number, input: string): string {
-    const { execApps } = this.state;
+    const { execApps, optionAttrs } = this.state;
     if (execApps[appIndex].selectedOptions.length === 0) {
       return '';
     }
@@ -72,14 +129,34 @@ export class Exec extends React.Component<ExecProps, ExecState> {
         continue;
       }
 
-      output = output ? execApps[appIndex].options[i].handleInput(output) : execApps[appIndex].options[i].handleInput(input);
+      var attrValues: ExecAppOptionAttrValue[] = [];
+      for (var j = 0; j < optionAttrs[appIndex][i].length; j++) {
+        if (execApps[appIndex].options[i].attributes && j < execApps[appIndex].options[i].attributes!.length) {
+          attrValues.push(this.inputToAttrValue(execApps[appIndex].options[i].attributes![j].value, optionAttrs[appIndex][i][j]));
+        }
+      }
+      output = output ? execApps[appIndex].options[i].handleInput(output, attrValues) : execApps[appIndex].options[i].handleInput(input, attrValues);
     }
 
     return output;
   }
 
+  toggleOptionMenu(appIndex: number, optionIndex: number, e: React.MouseEvent<HTMLElement>) {
+    var { activeOptionMenu } = this.state;
+    var activeOptionMenuStr = this.genActiveOptionMenuStr(appIndex, optionIndex);
+
+    activeOptionMenu = activeOptionMenu === activeOptionMenuStr ? "" : activeOptionMenuStr;
+    this.setState({
+      activeOptionMenu
+    });
+  }
+
+  genActiveOptionMenuStr(appIndex: number, optionIndex: number): string {
+    return `${appIndex}-${optionIndex}`;
+  }
+
   render() {
-    const { execApps } = this.state;
+    const { execApps, optionAttrs, activeOptionMenu } = this.state;
 
     return (
       <div className="hero is-fullheight">
@@ -120,17 +197,105 @@ export class Exec extends React.Component<ExecProps, ExecState> {
                     <div className="app-option">
                       {execApp.options.map((option, optionIndex) => {
                         return (
-                          <button
-                            key={optionIndex}
-                            className={
-                              "button"
-                              + (execApp.selectedOptions.includes(optionIndex) ? " is-primary" : " is-light")
+                          <div key={optionIndex} className="field has-addons">
+                            <p className="control">
+                              <button
+                                className={
+                                  "button"
+                                  + (execApp.selectedOptions.includes(optionIndex) ? " is-primary" : " is-light")
+                                }
+                                onClick={this.onSelectOption.bind(this, appIndex, optionIndex)}
+                                disabled={execApp.input.trim() ? false : true}
+                              >
+                                {option.name}
+                              </button>
+                            </p>
+                            {
+                              option.attributes && option.attributes.length > 0
+                              ? <div className="control">
+                                  <button
+                                    className={
+                                      "button"
+                                      + (execApp.selectedOptions.includes(optionIndex) ? " is-primary" : " is-light")
+                                    }
+                                    aria-haspopup="true"
+                                    onClick={this.toggleOptionMenu.bind(this, appIndex, optionIndex)}
+                                  >
+                                    {execApp.selectedOptions.includes(optionIndex)
+                                      ? <OptionsOutline
+                                          cssClasses={"option-icon is-active"}
+                                        />
+                                      : <OptionsOutline
+                                          cssClasses={"option-icon"}
+                                        />
+                                    }
+                                  </button>
+                                  <div className={"modal" + (activeOptionMenu === this.genActiveOptionMenuStr(appIndex, optionIndex) ? " is-active" : "")}>
+                                    <div className="modal-background" onClick={this.toggleOptionMenu.bind(this, appIndex, optionIndex)}></div>
+                                    <div className="modal-card">
+                                      <header className="modal-card-head">
+                                        <p className="modal-card-title">{option.name}</p>
+                                        <button className="delete" aria-label="close" onClick={this.toggleOptionMenu.bind(this, appIndex, optionIndex)}></button>
+                                      </header>
+                                      <section className="modal-card-body">
+                                        {execApp.options[optionIndex].attributes?.map((attr, attrIndex) => {
+                                          switch (typeof attr.value) {
+                                            case "number":
+                                              return (
+                                                <div key={attrIndex} className="field is-horizontal">
+                                                  <div className="field-label is-normal">
+                                                    <label className="label">{attr.name}</label>
+                                                  </div>
+                                                  <div className="field-body">
+                                                    <div className="field">
+                                                      <p className="control">
+                                                        <input className="input is-primary" type="number" placeholder={attr.help} min="0" value={optionAttrs[appIndex][optionIndex][attrIndex] as string} onChange={this.onOptionAttrInputChange.bind(this, appIndex, optionIndex, attrIndex)} />
+                                                      </p>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              )
+                                            case "boolean":
+                                              return (
+                                                <div key={attrIndex} className="field is-horizontal">
+                                                  <div className="field-label">
+                                                    <label className="label">{attr.name}</label>
+                                                  </div>
+                                                  <div className="field-body">
+                                                    <div className="field">
+                                                      <div className="control">
+                                                        <label className="checkbox">
+                                                          <input type="checkbox" checked={optionAttrs[appIndex][optionIndex][attrIndex] as boolean} onChange={this.onOptionAttrInputChange.bind(this, appIndex, optionIndex, attrIndex)} />
+                                                        </label>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              )
+                                            default:
+                                              return (
+                                                <div key={attrIndex} className="field is-horizontal">
+                                                  <div className="field-label">
+                                                    <label className="label">{attr.name}</label>
+                                                  </div>
+                                                  <div className="field-body">
+                                                    <div className="field">
+                                                      <p className="control">
+                                                        <input className="input is-primary" type="text" placeholder={attr.help} value={optionAttrs[appIndex][optionIndex][attrIndex] as string} onChange={this.onOptionAttrInputChange.bind(this, appIndex, optionIndex, attrIndex)} />
+                                                      </p>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              )
+                                          }
+                                        })}
+                                      </section>
+                                    </div>
+                                  </div>
+                                </div>
+                              : ''
                             }
-                            onClick={this.onSelectOption.bind(this, appIndex, optionIndex)}
-                            disabled={execApp.input.trim() ? false : true}
-                          >
-                            {option.name}
-                          </button>
+                          </div>
                         )
                       })}
                     </div>
@@ -178,17 +343,107 @@ export class Exec extends React.Component<ExecProps, ExecState> {
                     <div className="app-option">
                       {execApp.options.map((option, optionIndex) => {
                         return (
-                          <button
-                            key={optionIndex}
-                            className={
-                              "button"
-                              + (execApp.selectedOptions.includes(optionIndex) ? " is-primary" : " is-light")
-                            }
-                            onClick={this.onSelectOption.bind(this, appIndex, optionIndex)}
-                            disabled={execApp.input.trim() ? false : true}
-                          >
-                            {option.name}
-                          </button>
+                          <div key={optionIndex} className="addons-wrapper">
+                            <div key={optionIndex} className="field has-addons">
+                              <p className="control">
+                                <button
+                                  className={
+                                    "button"
+                                    + (execApp.selectedOptions.includes(optionIndex) ? " is-primary" : " is-light")
+                                  }
+                                  onClick={this.onSelectOption.bind(this, appIndex, optionIndex)}
+                                  disabled={execApp.input.trim() ? false : true}
+                                >
+                                  {option.name}
+                                </button>
+                              </p>
+                              {
+                                option.attributes && option.attributes.length > 0
+                                ? <div className="control">
+                                    <button
+                                      className={
+                                        "button"
+                                        + (execApp.selectedOptions.includes(optionIndex) ? " is-primary" : " is-light")
+                                      }
+                                      aria-haspopup="true"
+                                      onClick={this.toggleOptionMenu.bind(this, appIndex, optionIndex)}
+                                    >
+                                      {execApp.selectedOptions.includes(optionIndex)
+                                        ? <OptionsOutline
+                                            cssClasses={"option-icon is-active"}
+                                          />
+                                        : <OptionsOutline
+                                            cssClasses={"option-icon"}
+                                          />
+                                      }
+                                    </button>
+                                    <div className={"modal" + (activeOptionMenu === this.genActiveOptionMenuStr(appIndex, optionIndex) ? " is-active" : "")}>
+                                      <div className="modal-background" onClick={this.toggleOptionMenu.bind(this, appIndex, optionIndex)}></div>
+                                      <div className="modal-card">
+                                        <header className="modal-card-head">
+                                          <p className="modal-card-title">{option.name}</p>
+                                          <button className="delete" aria-label="close" onClick={this.toggleOptionMenu.bind(this, appIndex, optionIndex)}></button>
+                                        </header>
+                                        <section className="modal-card-body">
+                                          {execApp.options[optionIndex].attributes?.map((attr, attrIndex) => {
+                                            switch (typeof attr.value) {
+                                              case "number":
+                                              return (
+                                                <div key={attrIndex} className="field is-horizontal">
+                                                  <div className="field-label is-normal">
+                                                    <label className="label">{attr.name}</label>
+                                                  </div>
+                                                  <div className="field-body">
+                                                    <div className="field">
+                                                      <p className="control">
+                                                        <input className="input is-primary" type="number" placeholder={attr.help} min="0" value={optionAttrs[appIndex][optionIndex][attrIndex] as string} onChange={this.onOptionAttrInputChange.bind(this, appIndex, optionIndex, attrIndex)} />
+                                                      </p>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              )
+                                            case "boolean":
+                                              return (
+                                                <div key={attrIndex} className="field is-horizontal">
+                                                  <div className="field-label">
+                                                    <label className="label">{attr.name}</label>
+                                                  </div>
+                                                  <div className="field-body">
+                                                    <div className="field">
+                                                      <div className="control">
+                                                        <label className="checkbox">
+                                                          <input type="checkbox" checked={optionAttrs[appIndex][optionIndex][attrIndex] as boolean} onChange={this.onOptionAttrInputChange.bind(this, appIndex, optionIndex, attrIndex)} />
+                                                        </label>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              )
+                                            default:
+                                              return (
+                                                <div key={attrIndex} className="field is-horizontal">
+                                                  <div className="field-label">
+                                                    <label className="label">{attr.name}</label>
+                                                  </div>
+                                                  <div className="field-body">
+                                                    <div className="field">
+                                                      <p className="control">
+                                                        <input className="input is-primary" type="text" placeholder={attr.help} value={optionAttrs[appIndex][optionIndex][attrIndex] as string} onChange={this.onOptionAttrInputChange.bind(this, appIndex, optionIndex, attrIndex)} />
+                                                      </p>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              )
+                                            }
+                                          })}
+                                        </section>
+                                      </div>
+                                    </div>
+                                  </div>
+                                : ''
+                              }
+                            </div>
+                          </div>
                         )
                       })}
                     </div>
