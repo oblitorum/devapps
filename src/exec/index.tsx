@@ -185,7 +185,7 @@ export class Exec extends React.Component<ExecProps, ExecState> {
                     <div className="app-input">
                       <textarea
                         className={"textarea" + (execApp.input && !execApp.validateInput(execApp.input) ? " is-danger" : " is-primary")}
-                        placeholder="paste json data here"
+                        placeholder={execApp.inputHelp}
                         onChange={this.onInputChange.bind(this, appIndex)}
                       ></textarea>
                     </div>
@@ -331,7 +331,7 @@ export class Exec extends React.Component<ExecProps, ExecState> {
                     <div className="app-input">
                       <textarea
                         className={"textarea" + (execApp.input && !execApp.validateInput(execApp.input) ? " is-danger" : " is-primary")}
-                        placeholder="paste json data here"
+                        placeholder={execApp.inputHelp}
                         onChange={this.onInputChange.bind(this, appIndex)}
                       ></textarea>
                     </div>

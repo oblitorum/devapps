@@ -45,12 +45,14 @@ export type ExecAppOption = {
 }
 
 export type ExecApp = {
+  inputHelp?: string
   validateInput: (input: string) => boolean
   options: ExecAppOption[]
 }
 
 export const execApps: ExecApp[] = [
   {
+    inputHelp: 'input JSON data here',
     validateInput: validateJSON,
     options: [
       {
@@ -77,6 +79,7 @@ export const execApps: ExecApp[] = [
     ]
   },
   {
+    inputHelp: 'input JSON data here',
     validateInput: validateJSON,
     options: [
       {
@@ -124,6 +127,7 @@ export const execApps: ExecApp[] = [
     ]
   },
   {
+    inputHelp: 'input XML data here',
     validateInput: validateXML,
     options: [
       {
