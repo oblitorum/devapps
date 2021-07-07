@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, RouteComponentProps } from 'react-router-dom';
+import { NavLink, RouteComponentProps, Redirect } from 'react-router-dom';
 import { CaretForward, CaretDown, OptionsOutline } from 'react-ionicons';
 
 import { apps, AppType, ExecApp, execApps, ExecAppOptionAttrValue } from 'app/index';
@@ -29,7 +29,7 @@ export class Exec extends React.Component<ExecProps, ExecState> {
     super(props);
 
     var stateExecApps =
-      execApps[props.location.state.appIndex]
+      props.location.state?.appIndex && execApps[props.location.state.appIndex]
       ? [{
           ...execApps[props.location.state.appIndex],
           input: '',
@@ -158,6 +158,14 @@ export class Exec extends React.Component<ExecProps, ExecState> {
 
   render() {
     const { execApps, optionAttrs, activeOptionMenu } = this.state;
+
+    if (execApps.length === 0) {
+      return (
+        <Redirect
+          to="/"
+        />
+      );
+    }
 
     return (
       <div className="hero is-fullheight">
