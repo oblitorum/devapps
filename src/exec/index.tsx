@@ -3,6 +3,7 @@ import { NavLink, RouteComponentProps } from 'react-router-dom';
 import { CaretForward, CaretDown, OptionsOutline } from 'react-ionicons';
 
 import { apps, AppType, ExecApp, execApps, ExecAppOptionAttrValue } from 'app/index';
+import Navbar from 'common/navbar';
 
 import 'index.scss'
 import 'exec/index.scss'
@@ -161,13 +162,7 @@ export class Exec extends React.Component<ExecProps, ExecState> {
     return (
       <div className="hero is-fullheight">
         <div className="hero-head">
-          <nav className="has-text-white has-background-primary" role="navigation" aria-label="main navigation">
-            <div className="navbar-brand">
-              <a style={{fontSize: "1.5rem"}} className="navbar-item has-text-white" href="/">
-                <span>DevApps</span>
-              </a>
-            </div>
-          </nav>
+          <Navbar />
         </div>
 
         <div className="hero-body is-hidden-touch">

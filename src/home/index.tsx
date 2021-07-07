@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { apps, AppType } from 'app/index';
+import Navbar from 'common/navbar';
 
 import 'index.scss';
 import 'home/index.scss';
@@ -51,13 +52,7 @@ export class Home extends React.Component<HomeProps, HomeState> {
     return (
       <div className="hero is-fullheight">
         <div className="hero-head">
-          <nav className="has-text-white has-background-primary" role="navigation" aria-label="main navigation">
-            <div className="navbar-brand">
-              <a style={{fontSize: "1.5rem"}} className="navbar-item has-text-white" href="/">
-                <span>DevApps</span>
-              </a>
-            </div>
-          </nav>
+          <Navbar />
         </div>
 
         <div className="hero-body is-flex-direction-column">
