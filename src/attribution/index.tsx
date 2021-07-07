@@ -19,7 +19,7 @@ export class Attribution extends React.Component {
           <div style={{width: "100%"}} className="container is-flex-grow-1">
             <div className="container is-fullhd content-board">
               <div className="content"><h1>Icons</h1></div>
-              <div className="columns">
+              <div className="columns is-multiline">
                 <div className="column is-one-third">
                   <div className="box app-icon">
                     <article className="media">
@@ -33,6 +33,25 @@ export class Attribution extends React.Component {
                           <strong className="name">@Smashicons</strong>
                           <div className="desc">
                             <div>Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+                          </div>
+                        </div>
+                      </div>
+                    </article>
+                  </div>
+                </div>
+                <div className="column is-one-third">
+                  <div className="box app-icon">
+                    <article className="media">
+                      <div className="media-left">
+                        <figure className="image is-64x64">
+                          <img src={require(`app/xml-file.svg`).default} alt="Icon" />
+                        </figure>
+                      </div>
+                      <div className="media-content">
+                        <div className="content">
+                          <strong className="name">@Prettycons</strong>
+                          <div className="desc">
+                            <div>Icons made by <a href="https://www.flaticon.com/authors/prettycons" title="prettycons">prettycons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
                           </div>
                         </div>
                       </div>

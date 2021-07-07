@@ -1,3 +1,5 @@
 declare module 'dirty-json'
 declare module 'xml-js'
 declare module 'json2csv'
+declare module 'xml-formatter'
+declare module 'fast-xml-parser'

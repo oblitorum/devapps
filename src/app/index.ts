@@ -1,5 +1,6 @@
 import React from 'react';
-import { formatJSON, json2CSV, json2XML, tryToFixJSON, validateJSON } from "app/json"
+import { formatJSON, json2CSV, json2XML, tryToFixJSON, validateJSON } from "app/json";
+import { formatXML, validateXML } from "app/xml";
 
 export type AppType = {
   name: string
@@ -17,6 +18,11 @@ export const apps: AppType[] = [
     name: 'JSON Converter',
     icon: "json-file.svg",
     desc: 'Convert JSON to XML, JSON to CSV, etc.'
+  },
+  {
+    name: 'XML Formatter & Validator',
+    icon: 'xml-file.svg',
+    desc: 'Format and validate XML data'
   }
 ]
 
@@ -113,6 +119,32 @@ export const execApps: ExecApp[] = [
           }
 
           return json2CSV(input);
+        }
+      }
+    ]
+  },
+  {
+    validateInput: validateXML,
+    options: [
+      {
+        name: 'Format',
+        attributes: [
+          {
+            name: "spaces",
+            value: 4,
+            help: 'Number of spaces to be used for indenting output'
+          }
+        ],
+        handleInput: (input: string, attributes?: ExecAppOptionAttrValue[]) => {
+          if (attributes?.length === 1) {
+            try {
+              return formatXML(input, {indentation: [...new Array(attributes[0] as number)].reduce((pre) => pre + " ", "")});
+            } catch (e) {
+              return formatXML(input);
+            }
+          }
+
+          return formatXML(input);
         }
       }
     ]
