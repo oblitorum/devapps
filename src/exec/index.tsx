@@ -245,49 +245,31 @@ export class Exec extends React.Component<ExecProps, ExecState> {
                                           switch (typeof attr.value) {
                                             case "number":
                                               return (
-                                                <div key={attrIndex} className="field is-horizontal">
-                                                  <div className="field-label is-normal">
-                                                    <label className="label">{attr.name}</label>
-                                                  </div>
-                                                  <div className="field-body">
-                                                    <div className="field">
-                                                      <p className="control">
-                                                        <input className="input is-primary" type="number" placeholder={attr.help} min="0" value={optionAttrs[appIndex][optionIndex][attrIndex] as string} onChange={this.onOptionAttrInputChange.bind(this, appIndex, optionIndex, attrIndex)} />
-                                                      </p>
-                                                    </div>
-                                                  </div>
+                                                <div key={attrIndex} className="field">
+                                                  <label className="label">{attr.name}</label>
+                                                  <p className="control">
+                                                    <input className="input is-primary" type="number" placeholder={attr.help} min="0" value={optionAttrs[appIndex][optionIndex][attrIndex] as string} onChange={this.onOptionAttrInputChange.bind(this, appIndex, optionIndex, attrIndex)} />
+                                                  </p>
                                                 </div>
                                               )
                                             case "boolean":
                                               return (
-                                                <div key={attrIndex} className="field is-horizontal">
-                                                  <div className="field-label">
-                                                    <label className="label">{attr.name}</label>
-                                                  </div>
-                                                  <div className="field-body">
-                                                    <div className="field">
-                                                      <div className="control">
-                                                        <label className="checkbox">
-                                                          <input type="checkbox" checked={optionAttrs[appIndex][optionIndex][attrIndex] as boolean} onChange={this.onOptionAttrInputChange.bind(this, appIndex, optionIndex, attrIndex)} />
-                                                        </label>
-                                                      </div>
-                                                    </div>
+                                                <div key={attrIndex} className="field">
+                                                  <label className="label">{attr.name}</label>
+                                                  <div className="control">
+                                                    <label className="checkbox">
+                                                      <input type="checkbox" checked={optionAttrs[appIndex][optionIndex][attrIndex] as boolean} onChange={this.onOptionAttrInputChange.bind(this, appIndex, optionIndex, attrIndex)} />
+                                                    </label>
                                                   </div>
                                                 </div>
                                               )
                                             default:
                                               return (
-                                                <div key={attrIndex} className="field is-horizontal">
-                                                  <div className="field-label">
-                                                    <label className="label">{attr.name}</label>
-                                                  </div>
-                                                  <div className="field-body">
-                                                    <div className="field">
-                                                      <p className="control">
-                                                        <input className="input is-primary" type="text" placeholder={attr.help} value={optionAttrs[appIndex][optionIndex][attrIndex] as string} onChange={this.onOptionAttrInputChange.bind(this, appIndex, optionIndex, attrIndex)} />
-                                                      </p>
-                                                    </div>
-                                                  </div>
+                                                <div key={attrIndex} className="field">
+                                                  <label className="label">{attr.name}</label>
+                                                  <p className="control">
+                                                    <input className="input is-primary" type="text" placeholder={attr.help} value={optionAttrs[appIndex][optionIndex][attrIndex] as string} onChange={this.onOptionAttrInputChange.bind(this, appIndex, optionIndex, attrIndex)} />
+                                                  </p>
                                                 </div>
                                               )
                                           }
@@ -392,49 +374,31 @@ export class Exec extends React.Component<ExecProps, ExecState> {
                                             switch (typeof attr.value) {
                                               case "number":
                                               return (
-                                                <div key={attrIndex} className="field is-horizontal">
-                                                  <div className="field-label is-normal">
-                                                    <label className="label">{attr.name}</label>
-                                                  </div>
-                                                  <div className="field-body">
-                                                    <div className="field">
-                                                      <p className="control">
-                                                        <input className="input is-primary" type="number" placeholder={attr.help} min="0" value={optionAttrs[appIndex][optionIndex][attrIndex] as string} onChange={this.onOptionAttrInputChange.bind(this, appIndex, optionIndex, attrIndex)} />
-                                                      </p>
-                                                    </div>
-                                                  </div>
+                                                <div key={attrIndex} className="field">
+                                                  <label className="label">{attr.name}</label>
+                                                  <p className="control">
+                                                    <input className="input is-primary" type="number" placeholder={attr.help} min="0" value={optionAttrs[appIndex][optionIndex][attrIndex] as string} onChange={this.onOptionAttrInputChange.bind(this, appIndex, optionIndex, attrIndex)} />
+                                                  </p>
                                                 </div>
                                               )
                                             case "boolean":
                                               return (
-                                                <div key={attrIndex} className="field is-horizontal">
-                                                  <div className="field-label">
-                                                    <label className="label">{attr.name}</label>
-                                                  </div>
-                                                  <div className="field-body">
-                                                    <div className="field">
-                                                      <div className="control">
-                                                        <label className="checkbox">
-                                                          <input type="checkbox" checked={optionAttrs[appIndex][optionIndex][attrIndex] as boolean} onChange={this.onOptionAttrInputChange.bind(this, appIndex, optionIndex, attrIndex)} />
-                                                        </label>
-                                                      </div>
-                                                    </div>
+                                                <div key={attrIndex} className="field">
+                                                  <label className="label">{attr.name}</label>
+                                                  <div className="control">
+                                                    <label className="checkbox">
+                                                      <input type="checkbox" checked={optionAttrs[appIndex][optionIndex][attrIndex] as boolean} onChange={this.onOptionAttrInputChange.bind(this, appIndex, optionIndex, attrIndex)} />
+                                                    </label>
                                                   </div>
                                                 </div>
                                               )
                                             default:
                                               return (
-                                                <div key={attrIndex} className="field is-horizontal">
-                                                  <div className="field-label">
-                                                    <label className="label">{attr.name}</label>
-                                                  </div>
-                                                  <div className="field-body">
-                                                    <div className="field">
-                                                      <p className="control">
-                                                        <input className="input is-primary" type="text" placeholder={attr.help} value={optionAttrs[appIndex][optionIndex][attrIndex] as string} onChange={this.onOptionAttrInputChange.bind(this, appIndex, optionIndex, attrIndex)} />
-                                                      </p>
-                                                    </div>
-                                                  </div>
+                                                <div key={attrIndex} className="field">
+                                                  <label className="label">{attr.name}</label>
+                                                  <p className="control">
+                                                    <input className="input is-primary" type="text" placeholder={attr.help} value={optionAttrs[appIndex][optionIndex][attrIndex] as string} onChange={this.onOptionAttrInputChange.bind(this, appIndex, optionIndex, attrIndex)} />
+                                                  </p>
                                                 </div>
                                               )
                                             }

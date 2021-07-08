@@ -45,7 +45,7 @@ export function json2XML(input: string, attr?: json2XMLAttr): string {
   }
 }
 
-type json2CSVAttr = {
+export type json2CSVAttr = {
   delimiter?: string
 }
 

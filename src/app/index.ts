@@ -1,6 +1,6 @@
 import React from 'react';
 import { formatJSON, json2CSV, json2XML, tryToFixJSON, validateJSON } from "app/json";
-import { formatXML, validateXML } from "app/xml";
+import { formatXML, validateXML, xml2CSV, xml2JSON } from "app/xml";
 
 export type AppType = {
   name: string
@@ -17,12 +17,17 @@ export const apps: AppType[] = [
   {
     name: 'JSON Converter',
     icon: "json-file.svg",
-    desc: 'Convert JSON to XML, JSON to CSV, etc.'
+    desc: 'Convert JSON to XML, JSON to CSV'
   },
   {
     name: 'XML Formatter & Validator',
     icon: 'xml-file.svg',
     desc: 'Format and validate XML data'
+  },
+  {
+    name: 'XML Converter',
+    icon: 'xml-file.svg',
+    desc: 'Convert XML to JSON'
   }
 ]
 
@@ -151,6 +156,63 @@ export const execApps: ExecApp[] = [
           return formatXML(input);
         }
       }
+    ]
+  },
+  {
+    inputHelp: 'input XML data here',
+    validateInput: validateXML,
+    options: [
+      {
+        name: 'To JSON',
+        attributes: [
+          {
+            name: 'spaces',
+            value: 4,
+            help: 'Number of spaces to be used for indenting JSON output'
+          },
+          {
+            name: 'ignore attributes',
+            value: true
+          },
+          {
+            name: 'attribute name prefix',
+            value: '@_'
+          },
+          {
+            name: 'text node name',
+            value: '#text'
+          }
+        ],
+        handleInput: (input: string, attributes?: ExecAppOptionAttrValue[]) => {
+          if (attributes?.length === 4) {
+            return xml2JSON(input, {
+              spaces: attributes[0] as number,
+              ignoreAttributes: attributes[1] as boolean,
+              attributeNamePrefix: attributes[2] as string,
+              textNodeName: attributes[3] as string
+            });
+          }
+
+          return xml2JSON(input)
+        }
+      },
+      // {
+      //   name: 'To CSV',
+      //   attributes: [
+      //     {
+      //       name: 'delimiter',
+      //       value: ',',
+      //       help: 'delimiter of columns'
+      //     }
+      //   ],
+      //   handleInput: (input: string, attributes?: ExecAppOptionAttrValue[]) => {
+      //     if (attributes?.length === 1) {
+      //       return xml2CSV(input, {delimiter: attributes[0] as string});
+      //     }
+
+      //     return xml2CSV(input);
+      //   }
+      // }
     ]
   }
 ]
