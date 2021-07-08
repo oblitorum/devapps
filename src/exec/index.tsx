@@ -29,7 +29,7 @@ export class Exec extends React.Component<ExecProps, ExecState> {
     super(props);
 
     var stateExecApps =
-      props.location.state?.appIndex && execApps[props.location.state.appIndex]
+      props.location.state?.appIndex >= 0 && execApps[props.location.state.appIndex]
       ? [{
           ...execApps[props.location.state.appIndex],
           input: '',
