@@ -185,7 +185,7 @@ export class Exec extends React.Component<ExecProps, ExecState> {
       <HelmetProvider>
       <div className="hero is-fullheight">
         <Helmet>
-          <title>{execApps[0].app.name}</title>
+          <title>Devapps - {execApps[0].app.name}</title>
           <meta name="description" content={execApps[0].app.desc} />
         </Helmet>
 
