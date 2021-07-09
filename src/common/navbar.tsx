@@ -9,7 +9,7 @@ export default class Navbar extends Component {
           <NavLink to="/">
             <div style={{fontSize: "1.5rem"}} className="navbar-item has-text-white">
               <figure className="image is-24x24 mr-3">
-                <img src={require('common/logo.svg').default} />
+                <img alt="logo" src={require('common/logo.svg').default} />
               </figure>
               <span>DevApps</span>
             </div>

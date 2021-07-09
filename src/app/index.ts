@@ -1,6 +1,6 @@
 import React from 'react';
 import { formatJSON, json2CSV, json2XML, tryToFixJSON, validateJSON } from "app/json";
-import { formatXML, validateXML, xml2CSV, xml2JSON } from "app/xml";
+import { formatXML, validateXML, xml2JSON } from "app/xml";
 
 export type AppType = {
   name: string

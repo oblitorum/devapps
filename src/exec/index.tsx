@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink, RouteComponentProps, Redirect } from 'react-router-dom';
 import { CaretForward, CaretDown, OptionsOutline } from 'react-ionicons';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 import { apps, AppType, ExecApp, execApps, ExecAppOptionAttrValue } from 'app/index';
 import Navbar from 'common/navbar';
@@ -28,12 +29,19 @@ export class Exec extends React.Component<ExecProps, ExecState> {
   constructor(props: ExecProps) {
     super(props);
 
+    var appIndex: number = -1;
+    if (props.location.state?.appIndex >= 0) {
+      appIndex = props.location.state?.appIndex;
+    } else {
+      appIndex = parseInt((new URLSearchParams(props.location.search).get('app_index')) as string, 10);
+    }
+
     var stateExecApps =
-      props.location.state?.appIndex >= 0 && execApps[props.location.state.appIndex]
+      appIndex >= 0 && execApps[appIndex]
       ? [{
-          ...execApps[props.location.state.appIndex],
+          ...execApps[appIndex],
           input: '',
-          app: apps[props.location.state.appIndex],
+          app: apps[appIndex],
           selectedOptions: []
         }]
       : [];
@@ -60,6 +68,12 @@ export class Exec extends React.Component<ExecProps, ExecState> {
       optionAttrs,
       activeOptionMenu: ""
     };
+
+    if (stateExecApps.length > 0) {
+      this.props.history.push({
+        search: `?app_index=${appIndex}`
+      });
+    } 
   }
 
   attrValueToInput(value: ExecAppOptionAttrValue): ExecAppOptionAttrValue {
@@ -168,7 +182,13 @@ export class Exec extends React.Component<ExecProps, ExecState> {
     }
 
     return (
+      <HelmetProvider>
       <div className="hero is-fullheight">
+        <Helmet>
+          <title>{execApps[0].app.name}</title>
+          <meta name="description" content={execApps[0].app.desc} />
+        </Helmet>
+
         <div className="hero-head">
           <Navbar />
         </div>
@@ -442,6 +462,7 @@ export class Exec extends React.Component<ExecProps, ExecState> {
           </footer>
         </div>
       </div>
+      </HelmetProvider>
     )
   }
 }

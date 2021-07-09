@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 import Navbar from 'common/navbar';
 
@@ -10,7 +11,13 @@ export class Attribution extends React.Component {
   render() {
 
     return (
+      <HelmetProvider>
       <div className="hero is-fullheight">
+        <Helmet>
+          <title>DevApps - Attributions</title>
+          <meta name="description" content="Website resource attributions" />
+        </Helmet>
+
         <div className="hero-head">
           <Navbar />
         </div>
@@ -32,7 +39,7 @@ export class Attribution extends React.Component {
                         <div className="content">
                           <strong className="name">@Smashicons</strong>
                           <div className="desc">
-                            <div>Icons made by <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+                            <div>Icons made by <a rel="noreferrer" target="_blank" href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from <a target="_blank" rel="noreferrer" href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
                           </div>
                         </div>
                       </div>
@@ -51,7 +58,7 @@ export class Attribution extends React.Component {
                         <div className="content">
                           <strong className="name">@Prettycons</strong>
                           <div className="desc">
-                            <div>Icons made by <a href="https://www.flaticon.com/authors/prettycons" title="prettycons">prettycons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+                            <div>Icons made by <a rel="noreferrer" target="_blank" href="https://www.flaticon.com/authors/prettycons" title="prettycons">prettycons</a> from <a target="_blank" rel="noreferrer" href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
                           </div>
                         </div>
                       </div>
@@ -73,6 +80,7 @@ export class Attribution extends React.Component {
           </footer>
         </div>
       </div>
+      </HelmetProvider>
     )
   }
 }

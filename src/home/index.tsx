@@ -1,5 +1,6 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 import { apps, AppType } from 'app/index';
 import Navbar from 'common/navbar';
@@ -50,7 +51,13 @@ export class Home extends React.Component<HomeProps, HomeState> {
     const { filterApps } = this.state;
 
     return (
+      <HelmetProvider>
       <div className="hero is-fullheight">
+        <Helmet>
+          <title>DevApps - Online Software Developement Tools</title>
+          <meta name="description" content="Online Software Developement Tools for developers, like JSON, XML etc." />
+        </Helmet>
+
         <div className="hero-head">
           <Navbar />
         </div>
@@ -67,9 +74,9 @@ export class Home extends React.Component<HomeProps, HomeState> {
               {filterApps.map((app, i) => {
                 return (
                   <div key={i} className="column is-one-third">
-                    <NavLink
+                    <Link
                       to={{
-                        pathname: '/exec',
+                        pathname: `/exec`,
                         state: {appIndex: i}
                       }}
                     >
@@ -88,7 +95,7 @@ export class Home extends React.Component<HomeProps, HomeState> {
                           </div>
                         </article>
                       </div>
-                    </NavLink>
+                    </Link>
                   </div>
                 )
               })}
@@ -107,6 +114,7 @@ export class Home extends React.Component<HomeProps, HomeState> {
           </footer>
         </div>
       </div>
+      </HelmetProvider>
     )
   }
 }
