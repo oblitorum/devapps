@@ -65,6 +65,25 @@ export class Attribution extends React.Component {
                     </article>
                   </div>
                 </div>
+                <div className="column is-one-third">
+                  <div className="box app-icon">
+                    <article className="media">
+                      <div className="media-left">
+                        <figure className="image is-64x64">
+                          <img src={require(`app/encryption.svg`).default} alt="Icon" />
+                        </figure>
+                      </div>
+                      <div className="media-content">
+                        <div className="content">
+                          <strong className="name">@Smashicons</strong>
+                          <div className="desc">
+                          <div>Icons made by <a target="_blank" href="https://smashicons.com/" title="Smashicons">Smashicons</a> from <a target="_blank" href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+                          </div>
+                        </div>
+                      </div>
+                    </article>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

@@ -32,7 +32,7 @@ export const apps: AppType[] = [
   },
   {
     name: "Hash/Checksum Generator",
-    icon: 'xml-file.svg',
+    icon: 'encryption.svg',
     desc: 'Generates hash/checksum value, supports ADLER32, CRC32, MD5, SHA1, SHA224, SHA256, SHA384 and SHA512'
   }
 ]
