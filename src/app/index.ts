@@ -1,6 +1,7 @@
 import React from 'react';
 import { formatJSON, json2CSV, json2XML, tryToFixJSON, validateJSON } from "app/json";
 import { formatXML, validateXML, xml2JSON } from "app/xml";
+import { hashADLER32, hashCRC32, hashMD5, hashSHA1, hashSHA224, hashSHA256, hashSHA384, hashSHA512 } from 'app/hash';
 
 export type AppType = {
   name: string
@@ -28,6 +29,11 @@ export const apps: AppType[] = [
     name: 'XML Converter',
     icon: 'xml-file.svg',
     desc: 'Convert XML to JSON'
+  },
+  {
+    name: "Hash/Checksum Generator",
+    icon: 'xml-file.svg',
+    desc: 'Generates hash/checksum value, supports ADLER32, CRC32, MD5, SHA1, SHA224, SHA256, SHA384 and SHA512'
   }
 ]
 
@@ -215,6 +221,44 @@ export const execApps: ExecApp[] = [
       //     return xml2CSV(input);
       //   }
       // }
+    ]
+  },
+  {
+    inputHelp: 'input text here',
+    validateInput: function(): boolean { return true; },
+    options: [
+      {
+        name: 'ADLER32',
+        handleInput: hashADLER32
+      },
+      {
+        name: 'CRC32',
+        handleInput: hashCRC32
+      },
+      {
+        name: 'MD5',
+        handleInput: hashMD5
+      },
+      {
+        name: 'SHA1',
+        handleInput: hashSHA1
+      },
+      {
+        name: "SHA224",
+        handleInput: hashSHA224
+      },
+      {
+        name: 'SHA256',
+        handleInput: hashSHA256
+      },
+      {
+        name: "SHA384",
+        handleInput: hashSHA384
+      },
+      {
+        name: 'SHA512',
+        handleInput: hashSHA512
+      }
     ]
   }
 ]
