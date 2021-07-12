@@ -111,6 +111,20 @@ export class Exec extends React.Component<ExecProps, ExecState> {
       execApps[appIndex].selectedOptions.push(optionIndex);
     }
 
+    for (var i = 0; i < execApps[appIndex].selectedOptions.length;) {
+      if (execApps[appIndex].selectedOptions[i] == optionIndex) {
+        execApps[appIndex].selectedOptions.slice(i, 1);
+        break;
+      }
+
+      if (execApps[appIndex].options[execApps[appIndex].selectedOptions[i]].combineAble) {
+        i++
+        continue;
+      }
+
+      execApps[appIndex].selectedOptions.splice(i, 1);
+    }
+
     this.setState({
       execApps
     });

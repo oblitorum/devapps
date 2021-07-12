@@ -46,7 +46,8 @@ export type ExecAppOptionAttr = {
 export type ExecAppOption = {
   name: string
   handleInput: (input: string, attributes?: ExecAppOptionAttrValue[]) => string
-  attributes?: ExecAppOptionAttr[]
+  attributes?: ExecAppOptionAttr[],
+  combineAble?: boolean
 }
 
 export type ExecApp = {
@@ -62,7 +63,8 @@ export const execApps: ExecApp[] = [
     options: [
       {
         name: "Try to fix",
-        handleInput: tryToFixJSON
+        handleInput: tryToFixJSON,
+        combineAble: true
       },
       {
         name: 'Format',
