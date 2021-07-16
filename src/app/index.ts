@@ -9,6 +9,11 @@ export type AppType = {
   desc: string
 }
 
+export enum AppInputType {
+  Text = 1,
+  File
+}
+
 export const apps: AppType[] = [
   {
     name: 'JSON Formatter & Validator',
@@ -51,21 +56,26 @@ export type ExecAppOptionAttr = {
 
 export type ExecAppOption = {
   name: string
-  handleInput: (input: string, attributes?: ExecAppOptionAttrValue[]) => string
+  handleInput: (input: any, attributes?: ExecAppOptionAttrValue[]) => string
   attributes?: ExecAppOptionAttr[],
   combineAble?: boolean
 }
 
 export type ExecApp = {
+  acceptInputs: AppInputType[]
   inputHelp?: string
   validateInput: (input: string) => boolean
+  AllowMultipleFiles?: boolean
+  acceptFiles?: string
   options: ExecAppOption[]
 }
 
 export const execApps: ExecApp[] = [
   {
+    acceptInputs: [AppInputType.Text, AppInputType.File],
     inputHelp: 'input JSON data here',
     validateInput: validateJSON,
+    acceptFiles: "text/plain,application/json",
     options: [
       {
         name: "Try to fix",
@@ -92,8 +102,10 @@ export const execApps: ExecApp[] = [
     ]
   },
   {
+    acceptInputs: [AppInputType.Text, AppInputType.File],
     inputHelp: 'input JSON data here',
     validateInput: validateJSON,
+    acceptFiles: "text/plain,application/json",
     options: [
       {
         name: 'To XML',
@@ -140,8 +152,10 @@ export const execApps: ExecApp[] = [
     ]
   },
   {
+    acceptInputs: [AppInputType.Text, AppInputType.File],
     inputHelp: 'input XML data here',
     validateInput: validateXML,
+    acceptFiles: "text/plain,application/xml",
     options: [
       {
         name: 'Format',
@@ -167,8 +181,10 @@ export const execApps: ExecApp[] = [
     ]
   },
   {
+    acceptInputs: [AppInputType.Text, AppInputType.File],
     inputHelp: 'input XML data here',
     validateInput: validateXML,
+    acceptFiles: "text/plain,application/xml",
     options: [
       {
         name: 'To JSON',
@@ -224,8 +240,10 @@ export const execApps: ExecApp[] = [
     ]
   },
   {
+    acceptInputs: [AppInputType.Text, AppInputType.File],
     inputHelp: 'input text here',
     validateInput: function(): boolean { return true; },
+    acceptFiles: "text/plain",
     options: [
       {
         name: 'ADLER32',

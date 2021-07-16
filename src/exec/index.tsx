@@ -1,9 +1,10 @@
 import React from 'react';
 import { NavLink, RouteComponentProps, Redirect } from 'react-router-dom';
-import { CaretForward, CaretDown, OptionsOutline } from 'react-ionicons';
+import { CaretForward, CaretDown, OptionsOutline, CloudUploadOutline } from 'react-ionicons';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import Dropzone from 'react-dropzone';
 
-import { apps, AppType, ExecApp, execApps, ExecAppOptionAttrValue } from 'app/index';
+import { apps, AppType, ExecApp, execApps, ExecAppOptionAttrValue, AppInputType } from 'app/index';
 import Navbar from 'common/navbar';
 
 import 'index.scss'
@@ -17,9 +18,10 @@ type ExecProps = RouteComponentProps<{}, {}, ExecRouterProps>
 
 type ExecState = {
   execApps: (ExecApp & {
-    input: string
+    input: any
     app: AppType
     selectedOptions: number[]
+    onInputFocus?: boolean
   })[],
   optionAttrs: ExecAppOptionAttrValue[][][],
   activeOptionMenu: string
@@ -112,7 +114,7 @@ export class Exec extends React.Component<ExecProps, ExecState> {
     }
 
     for (var i = 0; i < execApps[appIndex].selectedOptions.length;) {
-      if (execApps[appIndex].selectedOptions[i] == optionIndex) {
+      if (execApps[appIndex].selectedOptions[i] === optionIndex) {
         execApps[appIndex].selectedOptions.slice(i, 1);
         break;
       }
@@ -184,6 +186,38 @@ export class Exec extends React.Component<ExecProps, ExecState> {
     return `${appIndex}-${optionIndex}`;
   }
 
+  onAppInpuFocus(appIndex: number) {
+    const { execApps } = this.state;
+    execApps[appIndex].onInputFocus = true;
+    this.setState({
+      execApps
+    });
+  }
+
+  onAppInputBlur(appIndex: number) {
+    const { execApps } = this.state;
+    execApps[appIndex].onInputFocus = false;
+    this.setState({
+      execApps
+    });
+  }
+
+  onAppAcceptedFiles(appIndex: number, files: File[]) {
+    if (files.length === 0) {
+      return;
+    }
+
+    const { execApps } = this.state;
+    var reader = new FileReader();
+    reader.onload = (e) => {
+      execApps[appIndex].input = e.target!.result as string;
+      this.setState({
+        execApps
+      });
+    }
+    reader.readAsText(files[0]);
+  }
+
   render() {
     const { execApps, optionAttrs, activeOptionMenu } = this.state;
 
@@ -217,11 +251,46 @@ export class Exec extends React.Component<ExecProps, ExecState> {
                   </div>
                   <div className="app-content">
                     <div className="app-input">
-                      <textarea
-                        className={"textarea" + (execApp.input && !execApp.validateInput(execApp.input) ? " is-danger" : " is-primary")}
-                        placeholder={execApp.inputHelp}
-                        onChange={this.onInputChange.bind(this, appIndex)}
-                      ></textarea>
+                      {execApp.acceptInputs.includes(AppInputType.File)
+                        ? <Dropzone onDrop={acceptedFiles => this.onAppAcceptedFiles(appIndex, acceptedFiles)}>
+                            {({getRootProps, getInputProps}) => (
+                              <section style={{height:"100%"}}>
+                                <div {...getRootProps()} style={{height:"100%", position: "relative"}}>
+                                  <textarea
+                                    onClick={(e)=>{e.stopPropagation()}}
+                                    onFocus={this.onAppInpuFocus.bind(this, appIndex)}
+                                    onBlur={this.onAppInputBlur.bind(this, appIndex)}
+                                    autoCorrect={"false"}
+                                    autoCapitalize={"false"}
+                                    className={"textarea" + (execApp.input && !execApp.validateInput(execApp.input) ? " is-danger" : " is-primary")}
+                                    placeholder={execApp.inputHelp}
+                                    onChange={this.onInputChange.bind(this, appIndex)}
+                                    value={execApp.input}
+                                  ></textarea>
+                                  {!execApp.onInputFocus && !execApp.input
+                                    ? <div style={{width: "100%", display: "flex", flexDirection: "column", alignItems: "center", position: "absolute", top:"50%", left: "50%", transform: "translate(-50%, -50%)"}}>
+                                        <CloudUploadOutline cssClasses={"cloud-icon is-primary"} />
+                                        <div>Drag and Drop files here, or <span className="has-text-link" style={{cursor: "pointer"}}>Browse</span></div>
+                                      </div>
+                                    : ''
+                                  }
+                                  <input {...getInputProps({multiple: execApp.AllowMultipleFiles, accept: execApp.acceptFiles ? execApp.acceptFiles : "*"})} />
+                                </div>
+                              </section>
+                            )}
+                          </Dropzone>
+                        : <textarea
+                            onClick={(e)=>{e.stopPropagation()}}
+                            onFocus={this.onAppInpuFocus.bind(this, appIndex)}
+                            onBlur={this.onAppInputBlur.bind(this, appIndex)}
+                            autoCorrect={"false"}
+                            autoCapitalize={"false"}
+                            className={"textarea" + (execApp.input && !execApp.validateInput(execApp.input) ? " is-danger" : " is-primary")}
+                            placeholder={execApp.inputHelp}
+                            onChange={this.onInputChange.bind(this, appIndex)}
+                            value={execApps[appIndex].input}
+                          ></textarea>
+                      }
                     </div>
                     <div className="app-input-arrow">
                       <div>Input</div>
@@ -321,9 +390,9 @@ export class Exec extends React.Component<ExecProps, ExecState> {
                     <div className="app-output-arrow">
                       <div>Output</div>
                       <div>
-                        <CaretForward cssClasses={execApp.selectedOptions.length? "arrow-icon is-primary" : "arrow-icon is-light"} />
-                        <CaretForward cssClasses={execApp.selectedOptions.length? "arrow-icon is-primary" : "arrow-icon is-light"} />
-                        <CaretForward cssClasses={execApp.selectedOptions.length? "arrow-icon is-primary" : "arrow-icon is-light"} />
+                        <CaretForward cssClasses={execApp.selectedOptions.length && execApp.input? "arrow-icon is-primary" : "arrow-icon is-light"} />
+                        <CaretForward cssClasses={execApp.selectedOptions.length && execApp.input? "arrow-icon is-primary" : "arrow-icon is-light"} />
+                        <CaretForward cssClasses={execApp.selectedOptions.length && execApp.input? "arrow-icon is-primary" : "arrow-icon is-light"} />
                       </div>
                     </div>
                     <div className="app-output">
@@ -345,11 +414,46 @@ export class Exec extends React.Component<ExecProps, ExecState> {
                   </div>
                   <div className="app-content">
                     <div className="app-input">
-                      <textarea
-                        className={"textarea" + (execApp.input && !execApp.validateInput(execApp.input) ? " is-danger" : " is-primary")}
-                        placeholder={execApp.inputHelp}
-                        onChange={this.onInputChange.bind(this, appIndex)}
-                      ></textarea>
+                      {execApp.acceptInputs.includes(AppInputType.File)
+                        ? <Dropzone onDrop={acceptedFiles => this.onAppAcceptedFiles(appIndex, acceptedFiles)}>
+                            {({getRootProps, getInputProps}) => (
+                              <section style={{height:"100%"}}>
+                                <div {...getRootProps()} style={{height:"100%", position: "relative"}}>
+                                  <textarea
+                                    onClick={(e)=>{e.stopPropagation()}}
+                                    onFocus={this.onAppInpuFocus.bind(this, appIndex)}
+                                    onBlur={this.onAppInputBlur.bind(this, appIndex)}
+                                    autoCorrect={"false"}
+                                    autoCapitalize={"false"}
+                                    className={"textarea" + (execApp.input && !execApp.validateInput(execApp.input) ? " is-danger" : " is-primary")}
+                                    placeholder={execApp.inputHelp}
+                                    onChange={this.onInputChange.bind(this, appIndex)}
+                                    value={execApp.input}
+                                  ></textarea>
+                                  {!execApp.onInputFocus && !execApp.input
+                                    ? <div style={{width: "100%", display: "flex", flexDirection: "column", alignItems: "center", position: "absolute", top:"50%", left: "50%", transform: "translate(-50%, -50%)"}}>
+                                        <CloudUploadOutline cssClasses={"cloud-icon is-primary"} />
+                                        <div>Drag and Drop files here, or <span className="has-text-link" style={{cursor: "pointer"}}>Browse</span></div>
+                                      </div>
+                                    : ''
+                                  }
+                                  <input {...getInputProps({multiple: execApp.AllowMultipleFiles, accept: execApp.acceptFiles ? execApp.acceptFiles : "*"})} />
+                                </div>
+                              </section>
+                            )}
+                          </Dropzone>
+                        : <textarea
+                            onClick={(e)=>{e.stopPropagation()}}
+                            onFocus={this.onAppInpuFocus.bind(this, appIndex)}
+                            onBlur={this.onAppInputBlur.bind(this, appIndex)}
+                            autoCorrect={"false"}
+                            autoCapitalize={"false"}
+                            className={"textarea" + (execApp.input && !execApp.validateInput(execApp.input) ? " is-danger" : " is-primary")}
+                            placeholder={execApp.inputHelp}
+                            onChange={this.onInputChange.bind(this, appIndex)}
+                            value={execApps[appIndex].input}
+                          ></textarea>
+                      }
                     </div>
                     <div className="app-input-arrow">
                       <div className="left">Input</div>

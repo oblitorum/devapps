@@ -77,7 +77,7 @@ export class Attribution extends React.Component {
                         <div className="content">
                           <strong className="name">@Smashicons</strong>
                           <div className="desc">
-                          <div>Icons made by <a target="_blank" href="https://smashicons.com/" title="Smashicons">Smashicons</a> from <a target="_blank" href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+                          <div>Icons made by <a target="_blank" rel="noreferrer" href="https://smashicons.com/" title="Smashicons">Smashicons</a> from <a target="_blank" rel="noreferrer" href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
                           </div>
                         </div>
                       </div>

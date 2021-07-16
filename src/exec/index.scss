@@ -31,6 +31,17 @@
         textarea {
           height: 100%;
         }
+
+        .cloud-icon {
+          width: 4rem;
+          height: 4rem;
+          cursor: pointer;
+        }
+
+        .cloud-icon.is-primary {
+          fill: $primary;
+          color: $primary;
+        }
       }
 
       .app-input-arrow,.app-output-arrow {
@@ -110,6 +121,17 @@
 
         textarea {
           height: 100%;
+        }
+
+        .cloud-icon {
+          width: 3rem;
+          height: 3rem;
+          cursor: pointer;
+        }
+
+        .cloud-icon.is-primary {
+          fill: $primary;
+          color: $primary;
         }
       }
 
